@@ -162,7 +162,7 @@ def main(output_env_file):
                 print('ERROR: Invalid MESOS_RESOURCES JSON {} --- {}'.format(e, env_resources), file=sys.stderr)
                 sys.exit(1)
             resources.extend(disk_resources)
-            env_file.write(RESOURCES_TEMPLATE.format(res=json.dumps(resources,indent=2)))
+            env_file.write(RESOURCES_TEMPLATE.format(res=json.dumps(resources)))
         else:
             msg = 'No additional volumes. Empty artifact file {} created'
 
