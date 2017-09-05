@@ -1,0 +1,17 @@
+---
+agent_list:
+- 192.168.131.2
+- 192.168.131.3
+bootstrap_url: http://192.168.131.10:9000
+cluster_name: dcos
+exhibitor_storage_backend: static
+ip_detect_path: genconf/ip-detect
+process_timeout: 3000
+master_discovery: static
+master_list:
+- 192.168.131.1
+resolvers:
+- 10.10.90.230
+#ssh_key_path: genconf/ssh_key
+#ssh_port: 22
+#ssh_user: root
