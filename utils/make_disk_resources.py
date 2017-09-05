@@ -30,8 +30,8 @@ JSON_DISK_TEMPLATE = Template('''
 {
     "disk": {
         "source": {
-            "type": "MOUNT",
-            "mount": {
+            "type": "$type",
+            "$point_type": {
                 "root": "$mp"
             }
         }
@@ -41,7 +41,7 @@ JSON_DISK_TEMPLATE = Template('''
 
 MOUNT_PATTERN = re.compile('on\s+(/dcos/volume\d+)\s+', re.M | re.I)
 
-PATH_PATTERN = re.compile('on\s+(/dcos/volume\d+)\s+', re.M | re.I)
+PATH_PATTERN = re.compile('on\s+(/dcos/path\d+)\s+', re.M | re.I)
 
 # Conversion factor for Bytes -> MB calculation
 MB = float(1 << 20)
@@ -70,7 +70,7 @@ def find_mounts_matching(pattern):
     return pattern.findall(mounts)
 
 
-def make_disk_resources_json(mounts, role):
+def make_disk_resources_json(mounts, role, type='MOUNT', point_type='mount'):
     '''
     Disk resources are defined in https://mesos.apache.org/documentation/latest/multiple-disk/
 
@@ -81,7 +81,7 @@ def make_disk_resources_json(mounts, role):
     '''
     for (mp, fs) in mounts:
         common = JSON_COMMON_TEMPLATE.substitute(free_space=fs, role=role)
-        disk = JSON_DISK_TEMPLATE.substitute(mp=mp)
+        disk = JSON_DISK_TEMPLATE.substitute(type=type, point_type=point_type, mp=mp)
         yield json.loads(common), json.loads(disk)
 
 
@@ -133,12 +133,16 @@ def main(output_env_file):
     mounts_dfree = list(get_mounts_and_freespace(find_mounts_matching(MOUNT_PATTERN)))
     print('Found matching mounts : {}'.format(mounts_dfree))
 
+    paths_dfree = list(get_mounts_and_freespace(find_mounts_matching(PATH_PATTERN)))
+    print('Found matching mounts : {}'.format(paths_dfree))
+
     role = os.getenv('MESOS_DEFAULT_ROLE', '*')
 
     disk_resources = list(
         map(
             stitch, chain(
                 make_disk_resources_json(mounts_dfree, role),
+                make_disk_resources_json(paths_dfree, role, type='PATH', point_type='path'),
                 _handle_root_volume(os.environ['MESOS_WORK_DIR'], role)
             )
         )
@@ -158,7 +162,7 @@ def main(output_env_file):
                 print('ERROR: Invalid MESOS_RESOURCES JSON {} --- {}'.format(e, env_resources), file=sys.stderr)
                 sys.exit(1)
             resources.extend(disk_resources)
-            env_file.write(RESOURCES_TEMPLATE.format(res=json.dumps(resources)))
+            env_file.write(RESOURCES_TEMPLATE.format(res=json.dumps(resources,indent=2)))
         else:
             msg = 'No additional volumes. Empty artifact file {} created'
 
@@ -179,3 +183,5 @@ if __name__ == '__main__':
     except VolumeDiscoveryException as e:
         print('ERROR: {}'.format(e), file=sys.stderr)
         sys.exit(1)
+    else:
+        sys.exit(0)
