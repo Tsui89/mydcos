@@ -2,3 +2,4 @@
 192-168-131-1.bootstrap/*
 master-scripts/get-pip.py
 master-scripts/nginx.tar
+utils/dev-resource.json
