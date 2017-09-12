@@ -1,0 +1,2 @@
+service ntpd restart
+timedatectl set-ntp true
