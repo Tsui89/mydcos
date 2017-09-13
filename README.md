@@ -32,3 +32,17 @@ agent:
 
 
 ##### yum install net-tools
+
+
+##### 应用访问
+
+host、label可以在应用的Details里找到
+
+```shell
+$ DOCKER_HOST=192.168.131.3:4243 docker  ps -q --filter "label=MESOS_TASK_ID=k2eyes_influxdb.d73cd2fa-982c-11e7-aaa2-36ce7409b167.9"
+e69ff56cb81d
+
+# Tsui @ Capitan in ~ [18:05:04] C:1
+$ DOCKER_HOST=192.168.131.3:4243 docker exec -ti e69 bash
+root@dcos-cloud3:/#
+```
