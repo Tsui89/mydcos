@@ -1,0 +1,10 @@
+{
+  "registry-mirrors" : [
+      "https://registry.docker-cn.com"
+    ],
+  "storage-driver":"overlay",
+  "hosts": [
+      "unix:///var/run/docker.sock",
+      "tcp://192.168.131.1:4243"
+    ]
+}
