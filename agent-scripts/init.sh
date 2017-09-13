@@ -1,6 +1,6 @@
 #!/bin/bash
 yum install -y docker
-echo '{"storage-driver":"overlay"}' > /etc/docker/daemon.json
+cp daemon.json > /etc/docker/daemon.json
 systemctl enable docker
 systemctl start docker
 systemctl stop firewalld && systemctl disable firewalld
