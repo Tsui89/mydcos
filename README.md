@@ -1,38 +1,49 @@
 # mydcos
 
-bootstrap:
-1. curl -O https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh
-2. yum install docker
-3. systemctl stop firewalld && systemctl disable firewalld
-4. vi /etc/selinux/config
-5. scp  -r bootstrap && cd bootstrap && vi genconf/config.yaml
-5. bash dcos_generate_config.sh --genconf
-6. docker pull nginx
-7. docker run -d -p 9000:80 -v $PWD/genconf/serve:/usr/share/nginx/html:ro nginx
+## DC/OS 部署
 
+ssh bootstrap:
 
-master:
+1. cd bootstrap
+2. curl -O https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh
+3. bash init.sh
+4. reboot
+5. vi genconf/config.yaml 修改以下几项
+  * agent_list
+  * bootstrap_url: 当前主机ip:9000
+  * master_list
+6. bash start.sh
 
-1. scp -r master-scripts && cd master-scripts && vi deploy.sh
+ssh master:
+
+1. cd master-scripts
 2. bash init.sh
-3. vi /etc/selinux/config
-4. vi /etc/docker/daemon.json "storage-driver":"overlay"
-5. reboot
-6. ./deploy.sh
+3. reboot
+4. vi deploy.sh 修改dcos_install.sh获取地址
+  * curl -O \<bootstrap_url>/dcos_install.sh
+5. ./deploy.sh
 
 
-agent:
+ssh agent:
 
-1. scp -r agent-scripts && cd agent-scripts && vi deploy.sh
+1. cd agent-scripts
 2. bash init.sh
-3. vi /etc/selinux/config
-4. vi /etc/docker/daemon.json "storage-driver":"overlay"
-5. reboot
-6. ./deploy.sh
+3. reboot
+4. vi deploy.sh 修改dcos_install.sh获取地址
+  * curl -O \<bootstrap_url>/dcos_install.sh
+5. ./deploy.sh
+6. 增加disk资源，查看init-disk.sh，根据实际情况进行修改.
+  * path类型资源mount规则是 /dcos/path\<number>
+  * mount类型资源mount规则是/dcos/volume\<number>
+7. 重启dcos-mesos-slave
+  * cp utils/make_disk_resources.py /opt/mesosphere/bin/make_disk_resources.py
+  * rm -f /var/lib/dcos/mesos-resources
+  * rm -f /var/lib/mesos/slave/meta/slaves/latest
+  * systemctl restart dcos-mesos-slave
+
 
 
 ##### yum install net-tools
-
 
 ##### 应用访问
 
