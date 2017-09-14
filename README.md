@@ -32,7 +32,7 @@ ssh agent:
 4. vi deploy.sh 修改dcos_install.sh获取地址
   * curl -O \<bootstrap_url>/dcos_install.sh
 5. ./deploy.sh
-6. 增加disk资源，查看init-disk.sh，根据实际情况进行修改.
+6. 增加disk资源，查看init-disk.sh，根据实际情况进行修改运行.
   * path类型资源mount规则是 /dcos/path\<number>
   * mount类型资源mount规则是/dcos/volume\<number>
 7. 重启dcos-mesos-slave
