@@ -7,5 +7,5 @@ mkdir /dcos/path1 -p
 mount /dev/sdb /dcos/path0
 mount /dev/sdc /dcos/path1
 
-/dev/sdb	/dcos/path0	xfs	defaults	0 0
-/dev/sdc	/dcos/path1	xfs	defaults	0 0
+echo  "/dev/sdb	/dcos/path0	xfs	defaults	0 0" >> /etc/fstab
+echo  "/dev/sdc	/dcos/path1	xfs	defaults	0 0" >> /etc/fstab
