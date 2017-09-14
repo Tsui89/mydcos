@@ -12,7 +12,9 @@ ssh bootstrap:
   * agent_list
   * bootstrap_url: 当前主机ip:9000
   * master_list
-6. bash start.sh
+6. vi genconf/ip-detect
+  * MASTER_IP 指向一个所有节点都可访问到的ip
+7. bash start.sh
 
 ssh master:
 
