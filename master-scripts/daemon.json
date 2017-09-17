@@ -5,6 +5,6 @@
   "storage-driver":"overlay",
   "hosts": [
       "unix:///var/run/docker.sock",
-      "tcp://192.168.131.1:4243"
+      "tcp://0.0.0.0:4243"
     ]
 }
