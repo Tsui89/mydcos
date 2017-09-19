@@ -16,6 +16,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	"golang.org/x/net/context"
+	"os/exec"
 )
 
 type appS struct{
@@ -79,22 +80,78 @@ func bashIn(svcRunning []appS){
 		defer mapToEnv(env)
 
 		envMap := map[string]string{
-			"DOCKER_HOST":        s.Host+":4243",
+			"DOCKER_HOST":        "tcp://"+s.Host+":4243",
 			"DOCKER_API_VERSION": "1.22",
 		}
 		mapToEnv(envMap)
 
-		dclient, _ := client.NewEnvClient()
+		dclient, err := client.NewEnvClient()
+		if err != nil{
+			fmt.Println(err.Error())
+			os.Exit(-1)
+		}
 		//defer dclient.Close()
 		filter := filters.NewArgs()
 		filter.Add("label", "MESOS_TASK_ID="+s.Id)
-		containers, _ := dclient.ContainerList(context.Background(), types.ContainerListOptions{
+		containers, err := dclient.ContainerList(context.Background(), types.ContainerListOptions{
 			Size:    true,
 			All:     true,
+			Latest:	 true,
 			Since:   "container",
 			Filters: filter})
-		for _,_ = range containers{
-			fmt.Println("test")
+		if err != nil{
+			fmt.Println(err.Error())
+			os.Exit(-1)
+		}
+		for _,c := range containers{
+
+			execCmd := exec.Command("DOCKER_HOST=192.168.131.4:4243 docker","exec","-ti",c.ID,"bash")
+			execCmd.Stdout = os.Stdout
+			execCmd.Stderr = os.Stderr
+			execCmd.Start()
+			execCmd.Wait()
+			//execCmd.Run()
+			//execId,_ := dclient.ContainerExecCreate(context.Background(),c.ID,types.ExecConfig{
+			//
+			//	Tty: true,
+			//	AttachStdin: true,
+			//	AttachStderr: true,
+			//	AttachStdout: true,
+			//	Cmd: []string{"ls /"},
+			//})
+			//err := dclient.ContainerExecStart(context.Background(),execId.ID,types.ExecStartCheck{})
+			//if err != nil {
+			//	fmt.Println(err)
+			//}
+	//		resp,err := dclient.ContainerExecAttach(context.Background(),execId.ID,types.ExecConfig{
+	//			Tty: true,
+	//			//AttachStdin: true,
+	//			//AttachStderr: true,
+	//			//AttachStdout: true,
+	//			Cmd: []string{"/bin/sh"},
+	//			},
+	//		)
+	//		if err != nil {
+	//			return
+	//		}
+	//		defer resp.Close()
+	//
+	//		receiveStdout := make(chan error, 1)
+	//		go func() {
+	//			_, err := io.Copy(os.Stdout, resp.Reader)
+	//			receiveStdout <- err
+	//		}()
+	//
+	//		select {
+	//		case err := <-receiveStdout:
+	//			if err != nil {
+	//				fmt.Println("Error receiveStdout: %s", err)
+	//				return
+	//			}
+	//		}
+	//
+	//		b, err := ioutil.ReadAll(resp.Reader)
+	//		fmt.Printf("%s", b)
 		}
 	}
 }
