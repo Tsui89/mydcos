@@ -92,7 +92,7 @@ def main():
             print "\tLabel: label=MESOS_TASK_ID=", apps.Id
 
             cmd = "docker exec -ti %s bash"%(id.id)
-            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"},show_message=False) <0 :
+            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) <0 :
                 #use sh
                 cmd = 'docker exec -ti %s sh' % (id.id)
                 subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"})
@@ -123,7 +123,10 @@ def subprocesscmd(cmd_str='', timeout=None, description='', env=os.environ,
             while time.time() < deadtime and ret.poll() is None:
                 time.sleep(poll_time)
         else:
+            print "In Container "
             ret.wait()
+            print "Out Container "
+
     except KeyboardInterrupt:
         ret.send_signal(signal.SIGINT)
         logging.error('Aborted by user.')
