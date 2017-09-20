@@ -92,16 +92,15 @@ def main():
             print "\tLabel: label=MESOS_TASK_ID=", apps.Id
 
             cmd = "docker exec -ti %s bash"%(id.id)
-            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) <0 :
+            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"},show_message=False,timeout=10) <0 :
                 #use sh
                 cmd = 'docker exec -ti %s sh' % (id.id)
-                subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"})
+                subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"},timeout=10)
 
 
 def subprocesscmd(cmd_str='', timeout=None, description='', env=os.environ,
                   show_message=True):
 
-    print cmd_str
     os_env = os.environ
     env = os_env.update(env)
     poll_time = 0.2
