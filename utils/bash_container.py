@@ -70,6 +70,9 @@ def main():
     app_url = "http://" + "/".join([master,"marathon","v2/apps", app_path,"tasks"])
     resp = urllib.urlopen(app_url)
 
+    if resp.code != 200:
+        print "Get App tasks error.",resp.read()
+        sys.exit(-1)
     data = json.loads(resp.read())
     ts = TaskR(**data)
 
