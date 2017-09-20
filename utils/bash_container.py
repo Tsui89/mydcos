@@ -12,6 +12,7 @@ import docker
 import logging
 import signal
 
+
 # type appS struct{
 # 	Id 		string	`json:"id"`
 # 	AppId string	`json:"appId"`
@@ -43,14 +44,30 @@ class TaskR(object):
         for t in self.tasks:
             yield AppS(**t)
 
+def parseApp(app_path=''):
+
+    if not app_path :
+        return False
+    elif "." in app_path:
+        strs = app_path.split('.')
+        strs.reverse()
+        return "/".join(strs)
+    else:
+        return app_path
+
 def main():
     if sys.argv < 1:
-        print "need argument svc name"
+        print "need app path, Usage: %s path-to-app"%sys.argv[0]
+        sys.exit(-1)
 
-    print "App: ", sys.argv[1]
+    app_path = parseApp(sys.argv[1])
+
+    print "App: ", app_path
+
+
     master = Master_Mesos[random.randint(0, 2)]
 
-    app_url = "http://" + "/".join([master,"marathon","v2/apps", sys.argv[1],"tasks"])
+    app_url = "http://" + "/".join([master,"marathon","v2/apps", app_path,"tasks"])
     resp = urllib.urlopen(app_url)
 
     data = json.loads(resp.read())
