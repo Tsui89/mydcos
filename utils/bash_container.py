@@ -56,7 +56,7 @@ def parseApp(app_path=''):
         return app_path
 
 def main():
-    if sys.argv < 1:
+    if len(sys.argv) < 1:
         print "need app path, Usage: %s path-to-app"%sys.argv[0]
         sys.exit(-1)
 
