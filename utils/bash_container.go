@@ -16,7 +16,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	"golang.org/x/net/context"
-	"os/exec"
+	"io"
 )
 
 type appS struct{
@@ -105,53 +105,56 @@ func bashIn(svcRunning []appS){
 		}
 		for _,c := range containers{
 
-			execCmd := exec.Command("DOCKER_HOST=192.168.131.4:4243 docker","exec","-ti",c.ID,"bash")
-			execCmd.Stdout = os.Stdout
-			execCmd.Stderr = os.Stderr
-			execCmd.Start()
-			execCmd.Wait()
+			//execCmd := exec.Command("docker","-H "+s.Host+":4243"," exec "," -ti ",c.ID," bash")
+			//execCmd.Stdout = os.Stdout
+			//execCmd.Stderr = os.Stderr
+			//execCmd.Stdin = os.Stdin
+			//err = execCmd.Start()
+			//if err !=nil {
+			//	fmt.Println(err.Error())
+			//}
+			//execCmd.Wait()
 			//execCmd.Run()
-			//execId,_ := dclient.ContainerExecCreate(context.Background(),c.ID,types.ExecConfig{
-			//
-			//	Tty: true,
-			//	AttachStdin: true,
-			//	AttachStderr: true,
-			//	AttachStdout: true,
-			//	Cmd: []string{"ls /"},
-			//})
+			execId,_ := dclient.ContainerExecCreate(context.Background(),c.ID,types.ExecConfig{
+
+				Tty: true,
+				AttachStdin: true,
+				AttachStderr: true,
+				AttachStdout: true,
+				Cmd: []string{"/bin/sh"},
+			})
 			//err := dclient.ContainerExecStart(context.Background(),execId.ID,types.ExecStartCheck{})
 			//if err != nil {
 			//	fmt.Println(err)
 			//}
-	//		resp,err := dclient.ContainerExecAttach(context.Background(),execId.ID,types.ExecConfig{
-	//			Tty: true,
-	//			//AttachStdin: true,
-	//			//AttachStderr: true,
-	//			//AttachStdout: true,
-	//			Cmd: []string{"/bin/sh"},
-	//			},
-	//		)
-	//		if err != nil {
-	//			return
-	//		}
-	//		defer resp.Close()
-	//
-	//		receiveStdout := make(chan error, 1)
-	//		go func() {
-	//			_, err := io.Copy(os.Stdout, resp.Reader)
-	//			receiveStdout <- err
-	//		}()
-	//
-	//		select {
-	//		case err := <-receiveStdout:
-	//			if err != nil {
-	//				fmt.Println("Error receiveStdout: %s", err)
-	//				return
-	//			}
-	//		}
-	//
-	//		b, err := ioutil.ReadAll(resp.Reader)
-	//		fmt.Printf("%s", b)
+			resp,err := dclient.ContainerExecAttach(context.Background(),execId.ID,types.ExecConfig{
+				Tty: true,
+				AttachStdin: true,
+				AttachStderr: true,
+				AttachStdout: true,
+				Cmd: []string{"/bin/sh"},
+				},
+			)
+			if err != nil {
+				return
+			}
+			defer resp.Close()
+
+			receiveStdout := make(chan error, 1)
+			go func() {
+				_, err := io.Copy(os.Stdout, resp.Reader)
+				receiveStdout <- err
+			}()
+			select {
+			case err := <-receiveStdout:
+				if err != nil {
+					fmt.Println("Error receiveStdout: %s", err)
+					return
+				}
+			}
+
+			b, err := ioutil.ReadAll(resp.Reader)
+			fmt.Printf("%s", b)
 		}
 	}
 }
