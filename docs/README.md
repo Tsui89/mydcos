@@ -1,29 +1,31 @@
 
 <span id="qa">QA</span>
-=================
+======
 
-* [Table of Contents](#qa)
+<!-- * [Table of Contents](#qa)
    * [什么是ARTIFACT URI](#artifact)
    * [PaaS中网络模式Host、Bridge、Virtual Network的区别](#PaaS中网络模式的区别)
    * [PaaS中存储类型的区别](#PaaS中存储类型的区别)
-   * [Host Volume使用](#Host Volume使用)
+   * [Host Volume使用](#HostVolume使用)
    * [PaaS中的应用命名](#PaaS中的应用命名)
    * [PaaS中的服务发现](#PaaS中的服务发现)
-   * [PaaS中如何使用dev私有镜像库镜像](#PaaS中如何使用dev私有镜像库镜像)
+   * [PaaS中如何使用dev私有镜像库镜像](#PaaS中如何使用dev私有镜像库镜像) -->
 
 
 注：
 * node节点是指PaaS中真正运行容器的主机。
 * 有状态应用是指有存储资源的应用。
 * 无状态应用是指没存储资源，也没有指定运行node节点的应用。
-* 应用的存储根路径指的是应用所在的node节点上/var/lib/mesos/slave/...,此路径对用户是透明的，用户使用存储根路径的文件写文件的相对路径即可。
 
 <span id="artifact">什么是ARTIFACT URI</span>
 ------
 
-创建应用时在Service》MORESRTTINGS下面有个ARTIFACT URI的配置项，这个地方填写的是文件的下载地址，下载文件会在容器启动之前下载到应用的存储根路径里。
-比如本说明文档下载地址 http://download.marathon.slave.mesos:31080/DCOS-Manuals.markdown。
+创建应用时在Service》MORESRTTINGS下面有个ARTIFACT URI的配置项，这个地方填写的是文件的下载地址，文件会在容器启动之前下载到容器内部。
+比如填写本说明文档下载地址 http://download.marathon.slave.mesos:31080/DCOS-Manuals.markdown。
 如果URI如下类型的压缩包.tar, .tar.gz, .tar.bz2, .tar.xz .gz, .tgz, .tbz2, .txz, .zip，URI下载之后默认会自动解压。
+
+然后这样使用，将这个文件挂载到容器的指定路径文件，比如hostpath=DCOS-Manuals.markdown containerpath=/path/to/dest/DCOS-Manuals.markdown
+
 
 <span id="PaaS中网络模式的区别">PaaS中网络模式Host、Bridge、Virtual Network的区别</span>
 ------
@@ -46,7 +48,7 @@
 * 只要应用不删除，存储的数据就不会销毁。
 * Host Volume挂载的目录文件，在PaaS应用界面的Files标签页不可见。
 
-<span id="Host Volume使用">Host Volume使用</span>
+<span id="HostVolume使用">Host Volume使用</span>
 ------
 
 | Host Path（源）| Container Path（目标）| 效果 | 备注 |
@@ -55,7 +57,7 @@
 | 已存在的目录 | 1.已存在的文件 <br> 2.已存在的目录 <br> 3.不存在 | 1.报错，应用创建失败 <br> 2.覆盖目标目录  <br> 3.创建所有中间目录（相当于mkdir -p），然后 host path 内所有内容映射到 container path 上 | 所以，映射目录到目录没有什么坑，只需要注意 container path 不是一个已经存在的文件就好 |
 | 不存在，会被系统默认为目录 |  1.已存在的文件 <br> 2.已存在的目录 <br> 3.不存在 | 1.报错，应用创建失败 <br> 2.自动创建 host path，然后映射目录 <br> 3.自动创建 host path，自动创建container path，然后映射目录 | - |
 
-* Host路径写相对路径，相对路径指的是相对于node节应用的存储根路径(node节点上/var/lib/mesos/slave/...)，一般配合artifact、Persistent Volume使用。
+* Host路径写相对路径，一般配合artifact、Persistent Volume使用。
 * Host路径写绝对路径，绝对路径指的是应用所在的node节点的本地路径。指定运行主机的应用可以使用。
 
 <span id="PaaS中的应用命名">PaaS中的应用命名</span>
