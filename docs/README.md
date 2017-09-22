@@ -2,14 +2,14 @@
 <span id="qa">QA</span>
 ======
 
-<!-- * [Table of Contents](#qa)
+* [Table of Contents](#qa)
    * [什么是ARTIFACT URI](#artifact)
    * [PaaS中网络模式Host、Bridge、Virtual Network的区别](#PaaS中网络模式的区别)
    * [PaaS中存储类型的区别](#PaaS中存储类型的区别)
    * [Host Volume使用](#HostVolume使用)
    * [PaaS中的应用命名](#PaaS中的应用命名)
    * [PaaS中的服务发现](#PaaS中的服务发现)
-   * [PaaS中如何使用dev私有镜像库镜像](#PaaS中如何使用dev私有镜像库镜像) -->
+   * [PaaS中如何使用dev私有镜像库镜像](#PaaS中如何使用dev私有镜像库镜像)
 
 
 注：
