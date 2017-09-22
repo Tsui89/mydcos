@@ -1,5 +1,5 @@
 
-<span id="qa">QA</span>
+<span id="qa">FAQ</span>
 ======
 
 * [Table of Contents](#qa)
@@ -46,7 +46,7 @@
 
 * 有状态应用无论使用哪种存储模式，都是不可以自动迁移的。使用Persistent Volume时，PaaS会找一个满足资源需求的node节点创建存储资源，之后这个应用只运行在这个node节点。
 * 只要应用不删除，存储的数据就不会销毁。
-* Host Volume挂载的目录文件，在PaaS应用界面的Files标签页不可见。
+* 通过Host Volume挂载的目录文件，在PaaS应用界面的Files标签页不可见。
 
 <span id="HostVolume使用">Host Volume使用</span>
 ------
@@ -70,7 +70,7 @@ PaaS中的应用命名（Service ID）是由Group名+应用名组成的。
 <span id="PaaS中的服务发现">PaaS中的服务发现</span>
 ------
 
-PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则访问就可以，命名规则示例,比如应用/ops/test
+PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则访问就可以，比如应用/ops/test，命名规则示例：
 
 * test.ops.marathon.mesos，dns解析到的是容器IP
 * test.ops.marathon.slave.mesos，dns解析到的是容器所在的node节点IP
