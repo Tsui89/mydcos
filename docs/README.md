@@ -88,18 +88,18 @@ PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则�
 操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,Network选择Virtual Network，设置Health Check，然后点击REVIEW & RUN，应用就会启动了。
 Service 设置
 <div>
-	<img src="../images/simple-service.jpg" width="70%"/>
+	<img src="images/simple-service.jpg" width="70%"/>
 </div>
 
 
 网络设置
 <div>
-	<img src="../images/simple-network.jpg" width="70%"/>
+	<img src="images/simple-network.jpg" width="70%"/>
 </div>
 
 Health Check设置
 <div>
-	<img src="../images/simple-healthcheck.jpg" width="70%"/>
+	<img src="images/simple-healthcheck.jpg" width="70%"/>
 </div>
 
 ###### 完整示例：创建使用私有镜像库、Persistent Volume、Virtual Network+端口映射的Nginx应用
@@ -107,27 +107,27 @@ Health Check设置
 
 操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,
 <div>
-	<img src="../images/ServiceSet.jpg" width="70%"/>
+	<img src="images/ServiceSet.jpg" width="70%"/>
 </div>
 
 然后点击MORESRTTINGS，设置私有镜像库artifact
 <div>
-	<img src="../images/artifact.jpg" width="70%"/>
+	<img src="images/artifact.jpg" width="70%"/>
 </div>
 
 设置Networking，选择Virtual Network，配置主机端口映射，主机端口随机。
 <div>
-	<img src="../images/network.jpg" width="70%"/>
+	<img src="images/network.jpg" width="70%"/>
 </div>
 
 然后设置Volumes，创建50M大小、名字叫data的Persistent Volume，然后将data挂载到容器的/tmp目录。
 <div>
-	<img src="../images/volume.jpg" width="70%"/>
+	<img src="images/volume.jpg" width="70%"/>
 </div>
 设置Health Check
 
 <div>
-	<img src="../images/healthcheck.jpg" width="70%"/>
+	<img src="images/healthcheck.jpg" width="70%"/>
 </div>
 
 点击 REVIEW & RUN，应用就部署完了。
@@ -136,12 +136,12 @@ Health Check设置
 
 进入应用的信息页面,等待应用运行状态变为Running，
 <div>
-	<img src="../images/instance.jpg" width="70%"/>
+	<img src="images/instance.jpg" width="70%"/>
 </div>
 点击应用的instance示例，进入应用详情界面
 
 <div>
-	<img src="../images/detail.jpg" width="70%"/>
+	<img src="images/detail.jpg" width="70%"/>
 </div>
 
 [Hit Top](#qa)
