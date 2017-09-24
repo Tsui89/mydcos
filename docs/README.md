@@ -83,7 +83,7 @@ PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则�
 示例
 ------
 
-##### 简单示例：创建busybox应用
+#### 简单示例：创建busybox应用
 
 操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,Network选择Virtual Network，设置Health Check，然后点击REVIEW & RUN，应用就会启动了。
 Service 设置
@@ -102,7 +102,7 @@ Health Check设置
 	<img src="images/simple-healthcheck.jpg" width="70%"/>
 </div>
 
-##### 完整示例：创建使用私有镜像库、Persistent Volume、Virtual Network+端口映射的Nginx应用
+#### 完整示例：创建使用私有镜像库、Persistent Volume、Virtual Network+端口映射的Nginx应用
 
 
 操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,
