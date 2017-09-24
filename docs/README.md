@@ -84,7 +84,6 @@ PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则�
 在PaaS中，使用私有镜像库镜像，在部署应用时需要设置artifact,才能通过registry认证。设置地址在Service》MORESRTTINGS》ARTIFACT URI处填写 file:///etc/docker.tar.gz
 
 <span id="示例">示例</span>
-
 ------
 
 #### <span id="简单示例">简单示例：创建busybox应用</span>
