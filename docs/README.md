@@ -10,6 +10,9 @@
    * [PaaS中的应用命名](#PaaS中的应用命名)
    * [PaaS中的服务发现](#PaaS中的服务发现)
    * [PaaS中如何使用dev私有镜像库镜像](#PaaS中如何使用dev私有镜像库镜像)
+   * [示例](#示例)
+     * [简单示例](#简单示例)
+     * [完整示例](#完整示例)
 
 
 注：
@@ -80,10 +83,11 @@ PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则�
 
 在PaaS中，使用私有镜像库镜像，在部署应用时需要设置artifact,才能通过registry认证。设置地址在Service》MORESRTTINGS》ARTIFACT URI处填写 file:///etc/docker.tar.gz
 
-示例
+<span id="示例">示例</span>
+
 ------
 
-#### 简单示例：创建busybox应用
+#### <span id="简单示例">简单示例：创建busybox应用</span>
 
 操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,Network选择Virtual Network，设置Health Check，然后点击REVIEW & RUN，应用就会启动了。
 Service 设置
@@ -102,7 +106,7 @@ Health Check设置
 	<img src="images/simple-healthcheck.jpg" width="70%"/>
 </div>
 
-#### 完整示例：创建使用私有镜像库、Persistent Volume、Virtual Network+端口映射的Nginx应用
+#### <span id="完整示例">完整示例：创建使用私有镜像库、Persistent Volume、Virtual Network+端口映射的Nginx应用</span>
 
 
 操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,
