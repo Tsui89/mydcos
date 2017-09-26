@@ -6,3 +6,10 @@ utils/dev-resource.json
 utils/venn/*
 utils/hello.sh
 cli/*
+docs/mydcos/
+openvpn/
+utils/bash-appM
+utils/bash-appM.spec
+utils/bash_container.spec
+utils/build/
+utils/dist/
