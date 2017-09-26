@@ -24,6 +24,7 @@ import signal
 # 	TaskR	[]appS	`json:"tasks"`
 # }
 
+OS_ERROR_CODE = 0xff
 Master_Mesos = ["192.168.131.11","192.168.131.12","192.168.131.13"]
 
 class AppS(object):
@@ -92,7 +93,7 @@ def main():
             print "\tLabel:     label=MESOS_TASK_ID=", apps.Id
 
             cmd = "docker exec -ti %s bash"%(id.id)
-            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) <0 :
+            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) == OS_ERROR_CODE :
                 #use sh
                 cmd = 'docker exec -ti %s sh' % (id.id)
                 subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"})
@@ -116,7 +117,7 @@ def subprocesscmd(cmd_str='', timeout=None, description='', env=os.environ,
                                shell=True, env=env)
     except OSError as e:
         logging.error('%s %s %s %s' % (description, e, cmd_str, str(env)))
-        return -1
+        return OS_ERROR_CODE
     try:
         if timeout:
             deadtime = _time_begin + timeout
