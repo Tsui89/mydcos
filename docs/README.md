@@ -128,7 +128,7 @@ Health Check设置
 	<img src="images/ServiceSet.jpg" width="70%"/>
 </div>
 
-然后点击MORESRTTINGS，设置私有镜像库artifact
+然后点击MORESETTINGS，设置私有镜像库artifact
 <div>
 	<img src="images/artifact.jpg" width="70%"/>
 </div>
