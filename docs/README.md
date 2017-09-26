@@ -29,7 +29,18 @@
 
 使用示例：
 * 普通文件，在Service页面填写Artifact URI之后，然后在Volume页面直接挂载文件名。
+* 压缩包文件，在Service页面填写Artifact URI之后，然后在Volume页面填写解压之后的目录名
 
+Artifact URI配置
+<div>
+	<img src="images/artifact-uri.jpg" width="70%"/>
+</div>
+
+Volume使用配置
+
+<div>
+	<img src="images/artifact-volume.jpg" width="70%"/>
+</div>
 
 <!-- 然后这样使用，将这个文件挂载到容器的指定路径文件，比如hostpath=DCOS-Manuals.markdown containerpath=/path/to/dest/DCOS-Manuals.markdown -->
 
