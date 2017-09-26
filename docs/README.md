@@ -27,7 +27,12 @@
 比如填写本说明文档下载地址 http://download.marathon.slave.mesos:31080/DCOS-Manuals.markdown。
 如果URI如下类型的压缩包.tar, .tar.gz, .tar.bz2, .tar.xz .gz, .tgz, .tbz2, .txz, .zip，URI下载之后默认会自动解压。
 
-然后这样使用，将这个文件挂载到容器的指定路径文件，比如hostpath=DCOS-Manuals.markdown containerpath=/path/to/dest/DCOS-Manuals.markdown
+使用示例：
+* 普通文件，在Service页面填写Artifact URI之后，然后在Volume页面直接挂载文件名。
+
+
+<!-- 然后这样使用，将这个文件挂载到容器的指定路径文件，比如hostpath=DCOS-Manuals.markdown containerpath=/path/to/dest/DCOS-Manuals.markdown -->
+
 
 
 <span id="PaaS中网络模式的区别">PaaS中网络模式Host、Bridge、Virtual Network的区别</span>

@@ -3,3 +3,6 @@
 master-scripts/get-pip.py
 master-scripts/nginx.tar
 utils/dev-resource.json
+utils/venn/*
+utils/hello.sh
+cli/*
