@@ -90,7 +90,7 @@ def main():
             print "\tHost:      ", apps.Host
             print "\tState:     ",apps.State
             print "\tStartedAt: ",apps.StartedAt
-            print "\tLabel:     label=MESOS_TASK_ID=", apps.Id
+            print "\tLabel:      label=MESOS_TASK_ID=%s"%apps.Id
 
             cmd = "docker exec -ti %s bash"%(id.id)
             if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) == OS_ERROR_CODE :
