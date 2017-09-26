@@ -23,9 +23,8 @@
 <span id="artifact">什么是ARTIFACT URI</span>
 ------
 
-创建应用时在Service》MORESRTTINGS下面有个ARTIFACT URI的配置项，这个地方填写的是文件的下载地址，文件会在容器启动之前下载到容器内部。
-比如填写本说明文档下载地址 http://download.marathon.slave.mesos:31080/DCOS-Manuals.markdown。
-如果URI如下类型的压缩包.tar, .tar.gz, .tar.bz2, .tar.xz .gz, .tgz, .tbz2, .txz, .zip，URI下载之后默认会自动解压。
+创建应用时在Service》MORESETTINGS下面有个ARTIFACT URI的配置项，这个地方填写的是文件的下载地址，文件会在容器启动之前下载到容器内部。
+如果URI填写如下类型的压缩包.tar, .tar.gz, .tar.bz2, .tar.xz .gz, .tgz, .tbz2, .txz, .zip，压缩包下载之后默认会自动解压。
 
 使用示例：
 * 普通文件，在Service页面填写Artifact URI之后，然后在Volume页面直接挂载文件名。
