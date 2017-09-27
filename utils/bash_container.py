@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import json
-import urllib2
+# import urllib2
 import urllib
 import random
 import subprocess
@@ -56,10 +56,32 @@ def parseApp(app_path=''):
     else:
         return app_path
 
+def update(name):
+    url_path = "macos/bash-appM" \
+        if name == 'bash-appM' \
+        else "ubuntu/bash-appU"
+    tmp_path = os.path.join("/tmp",name)
+    cmd = "wget http://download.marathon.slave.mesos:31080/utils/%s  -O %s" % (url_path,tmp_path)
+    subprocess.call(cmd,shell=True)
+
+    cmd = "chmod +x %s" % (tmp_path)
+    subprocess.call(cmd,shell=True)
+    pid = os.fork()
+    if pid == 0:
+        os.rename(tmp_path,"/usr/local/bin/%s"%name)
+        print name, "update ok."
+    else:
+        return
+
 def main():
     if len(sys.argv) < 2:
         print "need app path, Usage: %s path-to-app"%sys.argv[0]
+        print "\t Or Usage: %s --update to upgrade."
         sys.exit(-1)
+
+    if sys.argv[1] == "--update":
+        update(os.path.basename(sys.argv[0]))
+        sys.exit(0)
 
     app_path = parseApp(sys.argv[1])
 
