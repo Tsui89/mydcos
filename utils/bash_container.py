@@ -76,7 +76,7 @@ def update(name):
 def main():
     if len(sys.argv) < 2:
         print "need app path, Usage: %s path-to-app"%sys.argv[0]
-        print "\t Or Usage: %s --update to upgrade."
+        print "\t Or Usage: %s --update to upgrade."%sys.argv[0]
         sys.exit(-1)
 
     if sys.argv[1] == "--update":
