@@ -93,7 +93,7 @@ def main():
             print "\tLabel:      label=MESOS_TASK_ID=%s"%apps.Id
 
             cmd = "docker exec -ti %s bash"%(id.id)
-            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) == OS_ERROR_CODE :
+            if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) < 0 :
                 #use sh
                 cmd = 'docker exec -ti %s sh' % (id.id)
                 subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"})
@@ -117,7 +117,7 @@ def subprocesscmd(cmd_str='', timeout=None, description='', env=os.environ,
                                shell=True, env=env)
     except OSError as e:
         logging.error('%s %s %s %s' % (description, e, cmd_str, str(env)))
-        return OS_ERROR_CODE
+        return -1
     try:
         if timeout:
             deadtime = _time_begin + timeout
