@@ -65,7 +65,14 @@ def update(name):
     subprocess.call(cmd,shell=True)
 
     cmd = "chmod +x %s" % (tmp_path)
-    subprocess.call(cmd,shell=True)
+    try:
+        subprocess.call(cmd,shell=True)
+    except OSError as e:
+        print e.message
+        print "Retry use sudo"
+        print name, "update error."
+
+        return
     pid = os.fork()
     if pid == 0:
         os.rename(tmp_path,"/usr/local/bin/%s"%name)
