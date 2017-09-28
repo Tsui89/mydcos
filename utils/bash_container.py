@@ -115,10 +115,11 @@ def main():
 
 
         for id in containers_id:
-            print "\tHost:      ", apps.Host
-            print "\tState:     ",apps.State
-            print "\tStartedAt: ",apps.StartedAt
-            print "\tLabel:      label=MESOS_TASK_ID=%s"%apps.Id
+            print "\tHost:        ", apps.Host
+            print "\tState:       ",apps.State
+            print "\tStartedAt:   ",apps.StartedAt
+            print "\tLabel:        label=MESOS_TASK_ID=%s"%apps.Id
+            print "\tContainerID: ",id.id
 
             cmd = "docker exec -ti %s bash"%(id.id)
             if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) < 0 :
