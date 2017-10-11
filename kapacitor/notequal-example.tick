@@ -1,18 +1,23 @@
+//数据库名
 var db = 'opentsdb'
 
 var rp = 'autogen'
 
-var measurement = 'cwc.demo.random'
+//表名
+var measurement = 'gw_obj.upload.status'
 
-var groupBy = ['tag']
+//分组类型
+var groupBy = ['service']
 
+//过滤条件
 var whereFilter = lambda: TRUE
 
-var name = 'Random Tick {Service Status}'
+var name = 'GoldWind Tick {Service Status}'
 
 var idVar = name + ':{{.Group}}'
 
-var message = name + ': {{.Group}} is {{.Level}} at {{.Time}}'
+//邮件Subject
+var message = name + ' {{ index .Tags "service" }}  is {{.Level}}'
 
 var idTag = 'alertID'
 
@@ -30,6 +35,7 @@ var outputMeasurement = 'alerts'
 
 var triggerType = 'threshold'
 
+//邮件内容
 var details = 'ID: {{.ID}} </br>
  MeasureMent Name: {{.Name}} </br>
  TaskName: {{.TaskName}} </br>
@@ -37,6 +43,7 @@ var details = 'ID: {{.ID}} </br>
  Tags: {{.Tags}} </br>
  Level: {{.Level}} </br>
  Value: {{ index .Fields "value" }} </br>
+ Crit Condition： "value" != 3 </br>
  Time: {{.Time}}'
 
 var crit = 3
@@ -62,7 +69,8 @@ var trigger = data
         .messageField(messageField)
         .durationField(durationField)
         .details(details)
-        .email('hippopo@aliyun.com')
+        .email('cuiwenchang@k2data.com.cn')
+            .to('cuiwenchang@k2data.com.cn')
 
 trigger
     |influxDBOut()

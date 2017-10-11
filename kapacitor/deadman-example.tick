@@ -4,26 +4,26 @@ var db = 'opentsdb'
 var rp = 'autogen'
 
 //表名
-var measurement = 'cwc.demo.random'
+var measurement = 'gw_obj.goldwind.services'
 
 //表内tag字段
-var groupBy = ['demo']
+var groupBy = ['service']
 
 //filter lambda表达式
 var whereFilter = lambda: "value" == 3
 
 //时间间隔
-var period = 1m0s
+var period = 5m0s
 
 //出现的次数
 var threshold = 0.0
 
-var name = 'Goldwind Tick {Service Status}'
+var name = 'GoldWind Tick {Service Status}'
 
 var idVar = name + ':{{.Group}}'
 
 //邮件subject
-var message = name + ': {{.Group}} is {{.Level}} at {{.Time}}'
+var message = name + ' {{ index .Tags "service" }}  is {{.Level}}'
 
 var idTag = 'alertID'
 
@@ -49,11 +49,11 @@ var details = 'ID: {{.ID}} </br>
  Tags: {{.Tags}} </br>
  Level: {{.Level}} </br>
  Filter: value == 3 </br>
- Threshold: 0 </br> 
+ Threshold: 0 </br>
  Interval: 5m0s </br>
  Time: {{.Time}}'
 
- 
+
 var data = stream
     |from()
         .database(db)

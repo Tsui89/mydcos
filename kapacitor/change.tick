@@ -12,7 +12,7 @@ var name = 'changed'
 
 var idVar = name + ':{{.Group}}'
 
-var message = name + ': {{.Group}} is {{.Level}} at {{.Time}}'
+var message = name + ' {{ index .Tags "service" }}  is {{.Level}}'
 
 var idTag = 'alertID'
 
@@ -38,10 +38,8 @@ var details = 'ID: {{.ID}} </br>
  Level: {{.Level}} </br>
  Value: {{ index .Fields "value" }} </br>
  Time: {{.Time}}'
- 
-var shift = 1m
 
-0s
+var shift = 1m0s
 
 var crit = 0
 
