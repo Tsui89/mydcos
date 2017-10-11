@@ -1,3 +1,86 @@
+<span id="getting-started">5分钟快速入门</span>
+======
+
+这个平台是干嘛的？
+------
+
+这是一个容器和服务的运行平台，你可以
+1. 基于任意已有的 docker 镜像启动容器（IaaS：基础设施即服务模式）
+1. 从服务市场里挑选任意服务一键启动（PaaS：平台即服务模式）
+
+我为什么要用这个平台？
+------
+
+1. 工作需要想长期启动一些服务，还没有服务器？那就把你的容器运行到这里。
+1. 除了解决资源问题，平台还能通过内置的动态调度机制保证你的容器的高可用，再也不用担心服务器宕机影响开发了。
+1. 服务市场提供了很多常用的服务，例如 MySQL，Kafka，Spark，一键安装启动。
+
+启动你的第一个容器
+------
+
+1. 登录用户控制台：console.paas.k2
+1. 在弹框中输入你的用户名，点击"LOGIN"登录（注：平台通过用户名对容器可见性进行隔离，不用担心别人看到和乱操作你的服务。团队内部可以协调一个用户名来管理共享服务）
+1. 在左侧导航栏点击“Services”
+1. 点击右上角的“+”（Run a Service）
+1. 选择Single Container
+1. Service 配置如下图，Network选择Virtual Network，设置Health Check，然后点击REVIEW & RUN，应用就会启动了。
+
+Service 设置
+<div>
+	<img src="images/simple-service.jpg" width="70%"/>
+</div>
+网络设置
+<div>
+	<img src="images/simple-network.jpg" width="70%"/>
+</div>
+
+Health Check设置
+<div>
+	<img src="images/simple-healthcheck.jpg" width="70%"/>
+</div>
+
+一个更实际，稍微复杂一点的应用配置：Nginx
+------
+操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,
+<div>
+	<img src="images/ServiceSet.jpg" width="70%"/>
+</div>
+因为我们要使用私有镜像库dev.k2data.com.cn:5001，所以要把该镜像库的证书信息以 artifact 的方式传递给该应用。
+当然我们已经提前把证书打包好了，具体操作如下：点击MORE SETTINGS，点击"+ Artifact"，输入file:///etc/docker.tar.gz（固定写法）
+<div>
+	<img src="images/artifact.jpg" width="70%"/>
+</div>
+设置Networking，选择Virtual Network，配置主机端口映射，主机端口随机。
+<div>
+	<img src="images/network.jpg" width="70%"/>
+</div>
+然后设置Volumes，创建50M大小、名字叫data的Persistent Volume，然后将data挂载到容器的/tmp目录。
+<div>
+	<img src="images/volume.jpg" width="70%"/>
+</div>
+设置Health Check
+<div>
+	<img src="images/healthcheck.jpg" width="70%"/>
+</div>
+点击 REVIEW & RUN，应用就部署完了。
+
+如何访问？
+进入应用的信息页面,等待应用运行状态变为Running，
+<div>
+	<img src="images/instance.jpg" width="70%"/>
+</div>
+点击应用的instance示例，进入应用详情界面
+<div>
+	<img src="images/detail.jpg" width="70%"/>
+</div>
+
+从服务市场启动一个服务
+------
+两种方式进入服务市场：
+1. 在平台首页左侧导航栏点击Catalog
+2. 在“Services”页面点击右上角+号，然后选择 Install a Package
+然后你可以在服务市场浏览服务目录，也可以通过搜索条通过关键字搜索你想要的服务
+选中服务后，点击右上角 Review & Run 就可以了
 
 <span id="qa">FAQ</span>
 ======
@@ -10,10 +93,6 @@
    * [PaaS中的应用命名](#PaaS中的应用命名)
    * [PaaS中的服务发现](#PaaS中的服务发现)
    * [PaaS中如何使用dev私有镜像库镜像](#PaaS中如何使用dev私有镜像库镜像)
-   * [示例](#示例)
-     * [简单示例](#简单示例)
-     * [完整示例](#完整示例)
-
 
 注：
 * node节点是指PaaS中真正运行容器的主机。
@@ -97,69 +176,5 @@ PaaS中部署的应用都已经加入了内网dns解析，按域名命名规则�
 ------
 
 在PaaS中，使用私有镜像库镜像，在部署应用时需要设置artifact,才能通过registry认证。设置地址在Service》MORESRTTINGS》ARTIFACT URI处填写 file:///etc/docker.tar.gz
-
-<span id="示例">示例</span>
-------
-
-#### <span id="简单示例">简单示例：创建busybox应用</span>
-
-操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,Network选择Virtual Network，设置Health Check，然后点击REVIEW & RUN，应用就会启动了。
-Service 设置
-<div>
-	<img src="images/simple-service.jpg" width="70%"/>
-</div>
-
-
-网络设置
-<div>
-	<img src="images/simple-network.jpg" width="70%"/>
-</div>
-
-Health Check设置
-<div>
-	<img src="images/simple-healthcheck.jpg" width="70%"/>
-</div>
-
-#### <span id="完整示例">完整示例：创建使用私有镜像库、Persistent Volume、Virtual Network+端口映射的Nginx应用</span>
-
-
-操作步骤：点击右上角的“+”（Run a Service），选择Single Container。Service 配置如下图,
-<div>
-	<img src="images/ServiceSet.jpg" width="70%"/>
-</div>
-
-然后点击MORESETTINGS，设置私有镜像库artifact
-<div>
-	<img src="images/artifact.jpg" width="70%"/>
-</div>
-
-设置Networking，选择Virtual Network，配置主机端口映射，主机端口随机。
-<div>
-	<img src="images/network.jpg" width="70%"/>
-</div>
-
-然后设置Volumes，创建50M大小、名字叫data的Persistent Volume，然后将data挂载到容器的/tmp目录。
-<div>
-	<img src="images/volume.jpg" width="70%"/>
-</div>
-设置Health Check
-
-<div>
-	<img src="images/healthcheck.jpg" width="70%"/>
-</div>
-
-点击 REVIEW & RUN，应用就部署完了。
-
-验证：
-
-进入应用的信息页面,等待应用运行状态变为Running，
-<div>
-	<img src="images/instance.jpg" width="70%"/>
-</div>
-点击应用的instance示例，进入应用详情界面
-
-<div>
-	<img src="images/detail.jpg" width="70%"/>
-</div>
 
 [Hit Top](#qa)
