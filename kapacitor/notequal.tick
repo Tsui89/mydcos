@@ -1,0 +1,77 @@
+var db = 'opentsdb'
+
+var rp = 'autogen'
+
+var measurement = 'cwc.demo.random'
+
+var groupBy = ['tag']
+
+var whereFilter = lambda: TRUE
+
+var name = 'Random Tick {Service Status}'
+
+var idVar = name + ':{{.Group}}'
+
+var message = name + ': {{.Group}} is {{.Level}} at {{.Time}}'
+
+var idTag = 'alertID'
+
+var levelTag = 'level'
+
+var messageField = 'message'
+
+var durationField = 'duration'
+
+var outputDB = 'chronograf'
+
+var outputRP = 'autogen'
+
+var outputMeasurement = 'alerts'
+
+var triggerType = 'threshold'
+
+var details = 'ID: {{.ID}} </br>
+ MeasureMent Name: {{.Name}} </br>
+ TaskName: {{.TaskName}} </br>
+ Group: {{.Group}} </br>
+ Tags: {{.Tags}} </br>
+ Level: {{.Level}} </br>
+ Value: {{ index .Fields "value" }} </br>
+ Time: {{.Time}}'
+
+var crit = 3
+
+var data = stream
+    |from()
+        .database(db)
+        .retentionPolicy(rp)
+        .measurement(measurement)
+        .groupBy(groupBy)
+        .where(whereFilter)
+    |eval(lambda: "value")
+        .as('value')
+
+var trigger = data
+    |alert()
+        .crit(lambda: "value" != crit)
+        .stateChangesOnly()
+        .message(message)
+        .id(idVar)
+        .idTag(idTag)
+        .levelTag(levelTag)
+        .messageField(messageField)
+        .durationField(durationField)
+        .details(details)
+        .email('hippopo@aliyun.com')
+
+trigger
+    |influxDBOut()
+        .create()
+        .database(outputDB)
+        .retentionPolicy(outputRP)
+        .measurement(outputMeasurement)
+        .tag('alertName', name)
+        .tag('triggerType', triggerType)
+
+trigger
+    |httpOut('output')

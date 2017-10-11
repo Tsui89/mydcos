@@ -1,0 +1,91 @@
+ //数据库名
+var db = 'opentsdb'
+
+var rp = 'autogen'
+
+//表名
+var measurement = 'cwc.demo.random'
+
+//表内tag字段
+var groupBy = ['demo']
+
+//filter lambda表达式
+var whereFilter = lambda: "value" == 3
+
+//时间间隔
+var period = 1m0s
+
+//出现的次数
+var threshold = 0.0
+
+var name = 'Goldwind Tick {Service Status}'
+
+var idVar = name + ':{{.Group}}'
+
+//邮件subject
+var message = name + ': {{.Group}} is {{.Level}} at {{.Time}}'
+
+var idTag = 'alertID'
+
+var levelTag = 'level'
+
+var messageField = 'message'
+
+var durationField = 'duration'
+
+var outputDB = 'chronograf'
+
+var outputRP = 'autogen'
+
+var outputMeasurement = 'alerts'
+
+var triggerType = 'deadman'
+
+//邮件内容
+var details = 'ID: {{.ID}} </br>
+ MeasureMent Name: {{.Name}} </br>
+ TaskName: {{.TaskName}} </br>
+ Group: {{.Group}} </br>
+ Tags: {{.Tags}} </br>
+ Level: {{.Level}} </br>
+ Filter: value == 3 </br>
+ Threshold: 0 </br> 
+ Interval: 5m0s </br>
+ Time: {{.Time}}'
+
+ 
+var data = stream
+    |from()
+        .database(db)
+        .retentionPolicy(rp)
+        .measurement(measurement)
+        .groupBy(groupBy)
+        .where(whereFilter)
+
+var trigger = data
+    |deadman(threshold, period)
+        .stateChangesOnly()
+        .message(message)
+        .id(idVar)
+        .idTag(idTag)
+        .levelTag(levelTag)
+        .messageField(messageField)
+        .durationField(durationField)
+        .details(details)
+        .email('cuiwenchang@k2data.com.cn')
+          .to('cuiwenchang@k2data.com.cn')
+
+trigger
+    |eval(lambda: "emitted")
+        .as('value')
+        .keep('value', messageField, durationField)
+    |influxDBOut()
+        .create()
+        .database(outputDB)
+        .retentionPolicy(outputRP)
+        .measurement(outputMeasurement)
+        .tag('alertName', name)
+        .tag('triggerType', triggerType)
+
+trigger
+    |httpOut('output')
