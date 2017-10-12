@@ -12,7 +12,7 @@ var groupBy = ['type']
 //过滤条件
 var whereFilter = lambda: "type" == 'active'
 
-var name = 'DCOS'
+var name = 'DCOS Slave'
 
 var idVar = name + ':{{.Group}}'
 
@@ -43,7 +43,7 @@ var details = 'ID: {{.ID}} </br>
  Tags: {{.Tags}} </br>
  Level: {{.Level}} </br>
  Value: {{ index .Fields "value" }} </br>
- Crit Condition： "value" != 5 </br>
+ Crit Condition： "value" < 5 </br>
  Time: {{.Time}}'
 
 var crit = 5
@@ -60,7 +60,7 @@ var data = stream
 
 var trigger = data
     |alert()
-        .crit(lambda: "value" != crit)
+        .crit(lambda: "value" < crit)
         .stateChangesOnly()
         .message(message)
         .id(idVar)
