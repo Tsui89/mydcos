@@ -127,7 +127,7 @@ Volume使用配置
 <span id="PaaS中网络模式的区别">PaaS中网络模式Host、Bridge、Virtual Network的区别</span>
 ------
 
-| 模式 | 类似于docker网络中 | 跨node节点容器之间通信 | 跨node节点容器与任意节点之间通信 |
+| 模式 | 类似于docker网络中 | 跨node节点容器之间通信 | node节点容器与任意内网主机之间通信 |
 |:---:|:---:|:---:|:---:|
 | Host | Host | 可以 | 可以 |
 | Bridge | Bridge | 不可以 | 不可以 |
