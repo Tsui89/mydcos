@@ -16,7 +16,7 @@ var name = 'DCOS Slave'
 
 var idVar = name + ':{{.Group}}'
 
-var message = name + ': {{ index .Tags "hostname" }} is {{.Level}} '
+var message = name + ': {{ index .Tags "hostname" }} is {{ if eq .Level "OK" }}Alive{{ else }}Dead{{ end }}'
 var idTag = 'alertID'
 
 var levelTag = 'level'

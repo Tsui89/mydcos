@@ -72,7 +72,6 @@ func monitor(){
 	data,_ := ioutil.ReadAll(resp.Body)
 	var state State
 	json.Unmarshal(data,&state)
-	fmt.Println(state)
 	sendStr := strings.Join([]string{
 		fmt.Sprintf("%s,type=activated value=%d",StateMeasureMent,int(state.ActivatedSalves)),
 		fmt.Sprintf("\n %s,type=deadactivated value=%d",StateMeasureMent,int(state.DeadActivatedSlaves)),
