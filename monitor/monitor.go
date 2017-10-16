@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"strings"
-	"strconv"
 	"os"
 	"time"
 )
@@ -18,15 +17,31 @@ type MasterSnapshot struct {
 	InactiveSlaveNum float32	`json:"master/slaves_inactive"`
 }
 
-var DBName string = "mydcos"
+type Slave struct {
+	Hostname string `json:"hostname"`
+	Active	bool	`json:"active"`
+}
+
+type State struct {
+	ActivatedSalves float32 `json:"activated_slaves"`
+	DeadActivatedSlaves float32 `json:"deactivated_slaves"`
+	UnreachableSlaves float32 `json:"unreachable_slaves"`
+	Slaves []Slave `json:"slaves"`
+}
+
+var DBName string = "dcos"
 var InfluxdbUrl string = "http://influxdb.dev.cwc.marathon.mesos:8086"
+
+var StateMeasureMent = "state"
+var SlavesMeasureMent = "slave"
+
 type MetricData struct {
 	meas string
 	tags []string
 	value	float32
 }
 
-func send(s MasterSnapshot){
+func send( data string){
 	dbname := os.Getenv("DB_NAME")
 	if dbname == ""{
 		dbname = DBName
@@ -36,11 +51,6 @@ func send(s MasterSnapshot){
 	if influxdbUrl == ""{
 		influxdbUrl = InfluxdbUrl
 	}
-
-	data := strings.Join([]string{"slave,type=disconnected","value="+strconv.Itoa(int(s.DisconnectedSlaveNum)),
-		"\n slave,type=inactive","value="+strconv.Itoa(int(s.InactiveSlaveNum)),
-		"\n slave,type=active","value="+strconv.Itoa(int(s.ActiveSlaveNum)),
-		"\n slave,type=connected","value="+strconv.Itoa(int(s.ConnectedSlaveNum))}," ")
 	resp,err := http.Post(influxdbUrl+"/write?db="+dbname+"&rp=autogen","binary",strings.NewReader(data))
 
 	if err != nil{
@@ -53,16 +63,27 @@ func send(s MasterSnapshot){
 }
 
 func monitor(){
-	resp,err := http.Get("http://leader.mesos:5050/metrics/snapshot")
+
+	resp,err := http.Get("http://leader.mesos:5050/state")
 	if err != nil{
 		fmt.Println(err.Error())
 	}
 	defer resp.Body.Close()
 	data,_ := ioutil.ReadAll(resp.Body)
-	var masterSnapshot MasterSnapshot
-	json.Unmarshal(data,&masterSnapshot)
-	send(masterSnapshot)
+	var state State
+	json.Unmarshal(data,&state)
+	fmt.Println(state)
+	sendStr := strings.Join([]string{
+		fmt.Sprintf("%s,type=activated value=%d",StateMeasureMent,int(state.ActivatedSalves)),
+		fmt.Sprintf("\n %s,type=deadactivated value=%d",StateMeasureMent,int(state.DeadActivatedSlaves)),
+		fmt.Sprintf("\n %s,type=unreachable value=%d",StateMeasureMent,int(state.UnreachableSlaves))}," ")
 
+	for _,slave :=range state.Slaves{
+		sendStr = sendStr + strings.Join([]string{
+			fmt.Sprintf("\n %s,hostname=%s value=%t",SlavesMeasureMent,slave.Hostname,slave.Active),
+		}, " ")
+	}
+	send(sendStr)
 }
 
 func main(){
