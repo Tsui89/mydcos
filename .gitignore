@@ -20,3 +20,4 @@ monitor/
 utils/bash-appU.spec
 utils/gh-md-toc
 utils/venn/
+!examples/monitor
