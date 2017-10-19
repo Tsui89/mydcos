@@ -20,9 +20,12 @@ gluster peer probe server2
 gluster volume create gv0 replica 2 server1:/glusterfs/data/brick1 server2:/glusterfs/data/brick1 force
 
 
-#on dcos node
-echo 'server1:/gv0	/dcos/gfs0	glusterfs	defaults 1 2' >> /etc/fstab
-mount -a && mount
+#on dcos node /etc/rc.local
+mount -t glusterfs server1:/gv0 /dcos/gfs0
+
+
+#echo 'server1:/gv0	/dcos/gfs0	glusterfs	defaults 1 2' >> /etc/fstab
+#mount -a && mount
 
 
 #192.168.131.1   server1
