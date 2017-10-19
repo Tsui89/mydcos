@@ -14,3 +14,9 @@ utils/bash_container.spec
 utils/build/
 utils/dist/
 monitor/monitor
+.idea/
+examples/harbor/config/
+monitor/
+utils/bash-appU.spec
+utils/gh-md-toc
+utils/venn/
