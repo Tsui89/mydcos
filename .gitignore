@@ -13,3 +13,4 @@ utils/bash-appM.spec
 utils/bash_container.spec
 utils/build/
 utils/dist/
+monitor/monitor
