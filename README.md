@@ -59,3 +59,9 @@ e69ff56cb81d
 $ DOCKER_HOST=192.168.131.3:4243 docker exec -ti e69 bash
 root@dcos-cloud3:/#
 ```
+
+查看node resource资源信息
+
+1. 给role(slave_public)预留资源的node resource
+
+    dcos node --json | jq --raw-output '.[] | select(.reserved_resources.slave_public != null)'
