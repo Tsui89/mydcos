@@ -120,6 +120,7 @@ def main():
             print "\tStartedAt:   ",apps.StartedAt
             print "\tLabel:        label=MESOS_TASK_ID=%s"%apps.Id
             print "\tContainerID: ",id.id
+            print "\tExample:      docker -H ",apps.Host+":4243 ","exec -ti ",id.id," bash"
 
             cmd = "docker exec -ti %s bash"%(id.id)
             if subprocesscmd(cmd, env={'DOCKER_HOST': apps.Host+":4243"}) < 0 :
