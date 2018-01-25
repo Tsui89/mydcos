@@ -17,3 +17,4 @@ timedatectl set-ntp true
 
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 #"storage-driver":"overlay"
+#ntpd -q -g
