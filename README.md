@@ -65,3 +65,14 @@ root@dcos-cloud3:/#
 1. 给role(slave_public)预留资源的node resource
 
     dcos node --json | jq --raw-output '.[] | select(.reserved_resources.slave_public != null)'
+    
+    
+    
+##### update-time
+
+
+crontab -e
+```
+0 */2 * * * /opt/update-time.sh
+```
+
